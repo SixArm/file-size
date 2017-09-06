@@ -7,8 +7,13 @@ Syntax:
 Example:
 
     file-size example.txt
-    256
+    123
 
+Exit:
+
+  * 0 is success
+  * Anything else is an error.
+  
 
 ## Strategies
 
@@ -38,7 +43,7 @@ so this script tries these strategies in order:
     * Fast on some systems, but very slow on others.
 
 
-## Environment Variables
+## Environment variables
 
 This script has a goal to be customizable at runtime,
 so this script accepts envirnment variables for commands:
@@ -76,21 +81,23 @@ Example to export a custom `du` command path:
     export DU="/foo/du"
     file-size example.txt
 
-Using an environment variable can boost the speed of this script,
-because it can use the correct command first, rather than probing.
-
-For example a typical BSD or OSX system has a system `du` that
-doesn't have any option for `--apparent-size` or `--block-size`.
-
-On our systems, we install GNU `du` that does have these options,
-and we call the command `gdu`, and we set the environment variable:
-
-   export DU=/usr/local/bin/gdu
-   file-size example.txt
-
 We typically set our command variables in our /etc/environment file,
 and similar startup files such as our ~/.bashrc file and ~/.zshrc file,
 so our command variables are available for all of our shell scripts.
+
+
+## Environment variables for optimization
+
+Using an environment variable can boost the speed of this script,
+because it able to use the correct command first, rather than probing.
+
+For example, suppose your system command `wc` is very fast.
+
+You can use it this way:
+
+    export FILE_SIZE="wc -c"
+
+Now the script will prefer your system command.
 
 
 ## For OSX users
@@ -113,7 +120,7 @@ Another way is to add the GNU commands to your PATH, such as:
 ## Tracking
 
   * Program: file-size
-  * Version: 2.1.0
+  * Version: 3.0.0
   * Created: 2014-12-02
   * Updated: 2017-09-06
   * License: GPL

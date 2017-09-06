@@ -2,37 +2,79 @@
 #
 # File size in bytes, using the apparent size.
 #
-# This script has a goal to be cross-platform,
-# so it tries a variety of strategies, in order:
+# Syntax:
 #
-#   * Try `du --apparent-size`. Standard on Linux.
-#   * Try `gdu --apparent-size`. Available in GNU coreutils.
-#   * Try `find -printf` Standard on Linux, and likely on others.
-#   * Try `gfind -printf`. Available in GNU fileutils.
-#   * Try `stat --printf ...`. Not on standard OSX or Solaris.
-#   * Try `stat -f%z ...`. Standard on OSX, maybe BSD, and others.
-#   * Try `wc -c`. Fast on some systems, but slow on others.
+#     file-size <file>
 #
 # Example:
 #
-#     file-size example.txt
-#     1234
+#     $ file-size example.txt
+#     123
 #
 # Exit:
 #
 #   * 0 is success
-#   * Anything else is the error code of the command that failed.
+#   * Anything else is an error.
 #
-# ## Environment Variables
+#
+# ## Strategies
+#
+# This script has a goal to be cross-platform,
+# so it tries a variety of strategies, in order:
+#
+#   * `$FILE_SIZE`
+#     * This can be any custom command you want.
+#
+#   * `du --apparent-size`
+#     * Standard on current Linux.
+#
+#   * `gdu --apparent-size`
+#     * Available in current GNU coreutils.
+#
+#   * `find -printf`
+#     * Standard on current Linux.
+#     * Likely available on many other Unix systems.
+#
+#   * `gfind -printf`
+#     * Available in GNU fileutils.
+#
+#   * `stat --printf`
+#     * Not standard on macOS, OSX, or Solaris.
+#
+#   * `stat -f%z`
+#     * Standard on macOS, OSX, maybe BSD, and others.
+#
+#   * `wc -c`
+#     * Fast on some systems, but very slow on others.
+#
+#
+# ## Environment variables
 #
 # This script tries environment variables for command paths:
 #
-#   * DU: `du` command. Example: `DU=/usr/bin/du`
-#   * GDU: `gdu` command. Example: `GDU=/usr/local/bin/gdu`
-#   * FIND: `find -printf` command. Example: `FIND=/usr/bin/find`
-#   * GFIND: `gfind` command: Example: `GFIND=/usr/local/bin/gfind`
-#   * STAT: `stat` command. Example: `STAT=//usr/bin/stat`
-#   * WC: `wc` command. Example: `WC=/usr/bin/wc`
+#   * `DU`
+#     * du command (disk usage)
+#     * Example: `DU=/usr/bin/du`
+#
+#   * `GDU`
+#     * gdu command (GNU disk usage)
+#     * Example: `GDU=/usr/local/bin/gdu`
+#    
+#   * `FIND`
+#     * find command (find files and print sizes)
+#     * Example: `FIND=/usr/bin/find`
+#
+#   * `GFIND`
+#     * gfind command (GNU find files and print sizes)
+#     * Example: `GFIND=/usr/local/bin/gfind`
+#    
+#   * `STAT`
+#     * stat command (file statistics)
+#     * Example: `STAT=/usr/bin/stat`
+#    
+#   * `WC`
+#     * wc command (word count of characters a.k.a. bytes.)
+#     * Example: `WC=/usr/bin/wc`
 #
 # Example to provide a custom `du` command path:
 #
@@ -43,21 +85,24 @@
 #     export DU=/foo/du
 #     file-size example.txt
 #
-# Using an environment variable can boost the speed of this script,
-# because it able to use the correct command first, rather than probing.
-#
-# For example a typical BSD or OSX system has a system `du` that
-# doesn't have any option for `--apparent-size` or `--block-size`.
-#
-# On our systems, we install GNU `du` that does have these options,
-# and we call the command `gdu`, and we set the environment variable:
-#
-#    export DU=/usr/local/bin/gdu
-#    file-size example.txt
-#
 # We typically set our command variables in our /etc/environment file,
 # and similar startup files such as our ~/.bashrc file and ~/.zshrc file,
 # so our command variables are available for all of our shell scripts.
+#
+#
+# ## Environment variables for optimization
+#
+# Using an environment variable can boost the speed of this script,
+# because it able to use the correct command first, rather than probing.
+#
+# For example, suppose your system command `wc` is very fast.
+#
+# You can use it this way:
+#
+#    export FILE_SIZE="wc -c"
+#
+# Now the script will prefer your system command.
+#
 #
 # ## For OSX users
 #
@@ -75,12 +120,15 @@
 #
 #     export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
 #
-# Program: file-size
-# Version: 2.0.0
-# Created: 2014-12-02
-# Updated: 2017-09-06
-# License: GPL
-# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+#
+# ## Tracking
+#
+#   * Program: file-size
+#   * Version: 3.0.0
+#   * Created: 2014-12-02
+#   * Updated: 2017-09-06
+#   * License: GPL
+#   * Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
 ##
 set -euf
 out () { printf %s\\n "$*" ; }
@@ -89,20 +137,21 @@ arg_file="$1"
 file_size() {
   file="$1"
   size=$(
-    ${DU:-du}  --apparent-size --block-size=1 "$1" 2>/dev/null ||
-    ${GDU:-gdu} --apparent-size --block-size=1 "$1" 2>/dev/null ||
-    ${FIND:-find} "$1" -printf "%s" 2>/dev/null ||
-    ${GFIND:-gfind} "$1" -printf "%s" 2>/dev/null ||
-    ${STAT:-stat} --printf="%s" "$1" 2>/dev/null ||
-    ${STAT:-stat} -f%z "$1" 2>/dev/null ||
-    ${WC:-wc} -c <"$1" 2>/dev/null
+    [ ! -z ${FILE_SIZE+x} ] && $FILE_SIZE "$file" 2>/dev/null ||
+    ${DU:-du} --apparent-size --block-size=1 "$file" 2>/dev/null ||
+    ${GDU:-gdu} --apparent-size --block-size=1 "$file" 2>/dev/null ||
+    ${FIND:-find} "$file" -printf "%s" 2>/dev/null ||
+    ${GFIND:-gfind} "$file" -printf "%s" 2>/dev/null ||
+    ${STAT:-stat} --printf="%s" "$file" 2>/dev/null ||
+    ${STAT:-stat} -f%z "$file" 2>/dev/null ||
+    ${WC:-wc} -c <"$file" 2>/dev/null
   )
   q=$?; [ $q -eq 0 ] || exit $q
   out "$size" | awk '{print $1}'
 }
 
 file_size "$arg_file"
-exit 0
+exit $?
 
 ##
 # Function library that can be useful for other projects.
