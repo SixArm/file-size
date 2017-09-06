@@ -43,28 +43,28 @@ so this script tries these strategies in order:
 This script has a goal to be customizable at runtime,
 so this script accepts envirnment variables for commands:
 
-  * DU: `du` command
-    * Disk usage.
+  * `DU`
+    * `du` command (disk usage)
     * Example: `DU=/usr/bin/du`
 
-  * GDU: `gdu` command (
-    * GNU disk usage
+  * `GDU`
+    *`gdu` command (GNU disk usage)
     * Example: `GDU=/usr/local/bin/gdu`
     
-  * FIND: `find` command
-    * Find files and print sizes.
+  * `FIND`
+    *`find` command (find files and print sizes)
     * Example: `FIND=/usr/bin/find`
     
-  * GFIND: `gfind` command
-    * GNU find files and print sizes.
+  * `GFIND`
+    * `gfind` command (GNU find files and print sizes)
     * Example: `GFIND=/usr/local/bin/gfind`
     
-  * STAT: `stat` command
-    * File statistics.
+  * `STAT`
+    * `stat` command (file statistics)
     * Example: `STAT=/usr/bin/stat`
     
-  * WC: `wc` command
-    * Word count of characters a.k.a. bytes.
+  * `WC`
+    * `wc` command (word count of characters a.k.a. bytes.)
     * Example: `WC=/usr/bin/wc`
 
 Example to provide a custom `du` command path:
