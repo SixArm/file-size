@@ -9,7 +9,10 @@ Example:
     file-size example.txt
     123
 
-Exit:
+
+## Exit
+
+Exit codes:
 
   * 0 is success
   * Anything else is an error.
