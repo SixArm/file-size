@@ -12,9 +12,8 @@ Example:
 
 ## Strategies
 
-This script has a goal to be cross-platform.
-
-This script tries these strategies in order:
+This script has a goal to be cross-platform,
+so this script tries these strategies in order:
 
   * `du --apparent-size`
     * Standard on current Linux.
@@ -41,25 +40,31 @@ This script tries these strategies in order:
 
 ## Environment Variables
 
-This script has a goal to be customizable.
+This script has a goal to be customizable at runtime,
+so this script accepts envirnment variables for commands:
 
-This script accepts environment variables for command paths:
-
-  * DU: `du` command.
+  * DU: `du` command
+    * Disk usage.
     * Example: `DU=/usr/bin/du`
 
-  * GDU: `gdu` command.
+  * GDU: `gdu` command (
+    * GNU disk usage
     * Example: `GDU=/usr/local/bin/gdu`
-  * FIND: `find` command.
+    
+  * FIND: `find` command
+    * Find files and print sizes.
     * Example: `FIND=/usr/bin/find`
     
-  * GFIND: `gfind` command.
+  * GFIND: `gfind` command
+    * GNU find files and print sizes.
     * Example: `GFIND=/usr/local/bin/gfind`
     
-  * STAT: `stat` command.
+  * STAT: `stat` command
+    * File statistics.
     * Example: `STAT=/usr/bin/stat`
     
-  * WC: `wc` command.
+  * WC: `wc` command
+    * Word count of characters a.k.a. bytes.
     * Example: `WC=/usr/bin/wc`
 
 Example to provide a custom `du` command path:
@@ -72,7 +77,7 @@ Example to export a custom `du` command path:
     file-size example.txt
 
 Using an environment variable can boost the speed of this script,
-because it able to use the correct command first, rather than probing.
+because it can use the correct command first, rather than probing.
 
 For example a typical BSD or OSX system has a system `du` that
 doesn't have any option for `--apparent-size` or `--block-size`.
