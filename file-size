@@ -23,7 +23,7 @@
 # so it tries a variety of strategies, in order:
 #
 #   * `$FILE_SIZE`
-#     * This can be any custom command you want.
+#     * Any command you want.
 #
 #   * `du --apparent-size`
 #     * Standard on current Linux.
@@ -51,6 +51,9 @@
 # ## Environment variables
 #
 # This script tries environment variables for command paths:
+#
+#   * `$FILE_SIZE`
+#     * Any command you want; it must print the size first.
 #
 #   * `DU`
 #     * du command (disk usage)

@@ -23,6 +23,9 @@ Exit codes:
 This script has a goal to be cross-platform,
 so this script tries these strategies in order:
 
+  * `$FILE_SIZE`
+    * Any command you want.
+
   * `du --apparent-size`
     * Standard on current Linux.
     
@@ -49,6 +52,9 @@ so this script tries these strategies in order:
 
 This script has a goal to be customizable at runtime,
 so this script accepts envirnment variables for commands:
+
+  * `FILE_SIZE`
+     * Any command you want; it must print the size first.
 
   * `DU`
     * du command (disk usage)
