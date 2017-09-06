@@ -27,8 +27,7 @@ so this script tries these strategies in order:
     * Available in current GNU coreutils.
 
   * `find -printf`
-    * Standard on current Linux.
-    * Likely available on many other current Unix systems.
+    * Standard on current Linux, and likely on many others.
     
   * `gfind -printf`
     * Available in GNU fileutils.
