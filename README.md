@@ -82,7 +82,7 @@ so this script accepts envirnment variables for commands:
 
 Example to provide a custom `du` command path:
 
-    DU="/foo/du"  file-size example.txt
+    DU="/foo/du" file-size example.txt
 
 Example to export a custom `du` command path:
 
