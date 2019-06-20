@@ -128,8 +128,8 @@ Another way is to add the GNU commands to your PATH, such as:
 ## Tracking
 
   * Program: file-size
-  * Version: 3.0.0
+  * Version: 3.0.1
   * Created: 2014-12-02
-  * Updated: 2017-09-06
+  * Updated: 2019-06-20
   * License: GPL
   * Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
